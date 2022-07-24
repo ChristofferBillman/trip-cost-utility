@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap');
+
+:root {
+	--black: #2D2D2D;
+	--gray: #909090;
+	--primary: #8424FF;
+}
+
+h1 {
+	font-family: 'Inter', sans-serif;
+	font-weight: 700;
+	font-size: 2.5rem;
+	margin-bottom: 1rem;
+	color: var(--black);
+}
+
+h2 {
+	font-family: 'Inter', sans-serif;
+	font-weight: 700;
+	font-size: 2rem;
+	margin-bottom: 1rem;
+}
+
+label {
+	font-family: 'Inter', sans-serif;
+	font-weight: 700;
+	font-size: 1.5rem;
+	color: var(--gray);
+	position: relative;
+
+}
+
+.App {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	height: 100vh;
+}
+
+.app-column {
+	display: flex;
+	flex-direction: column;
+	width: 400px;
+
+}

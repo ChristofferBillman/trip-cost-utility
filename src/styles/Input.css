@@ -1,0 +1,39 @@
+.input-container {
+	display: flex;
+	flex-direction: column;
+}
+
+.input-container input {
+	width: 100%;
+	border: none;
+	border-bottom: 2px solid var(--gray);
+	margin-bottom: 0.5rem;
+	font-size: 1.5rem;
+	font-family: 'Inter', sans-serif;
+	font-weight: 700;
+	background-color: rgba(0, 0, 0, 0);
+	color: var(--primary);
+}
+
+.label-blurred {
+	color: var(--gray);
+	top: 1.5rem;
+	z-index: -1;
+	transition-duration: 200ms;
+}
+
+.label-focused {
+	color: var(--black);
+	top: 0;
+	transition-duration: 200ms;
+}
+
+.label-filled {
+	color: var(--gray);
+	transition-duration: 200ms;
+}
+
+.input-container input:focus {
+	outline: none;
+	border-bottom: 2px solid var(--primary);
+}
