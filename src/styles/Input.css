@@ -1,6 +1,19 @@
 .input-container {
 	display: flex;
 	flex-direction: column;
+	padding: 1rem 0 1rem 0;
+}
+
+.radio-input-container {
+	display: flex;
+	justify-content: space-between;
+	padding: 1rem 0 1rem 0;
+}
+
+input[type="radio"] {
+	position: fixed;
+	pointer-events: none;
+	opacity: 0;
 }
 
 .input-container input {
@@ -8,28 +21,31 @@
 	border: none;
 	border-bottom: 2px solid var(--gray);
 	margin-bottom: 0.5rem;
-	font-size: 1.5rem;
+	font-size: 1rem;
 	font-family: 'Inter', sans-serif;
 	font-weight: 700;
 	background-color: rgba(0, 0, 0, 0);
 	color: var(--primary);
+	border-radius: 0;
+}
+
+.selected {
+	color: var(--primary);
+	transition-duration: 200ms;
 }
 
 .label-blurred {
-	color: var(--gray);
-	top: 1.5rem;
+	top: 1rem;
 	z-index: -1;
 	transition-duration: 200ms;
 }
 
 .label-focused {
-	color: var(--black);
 	top: 0;
 	transition-duration: 200ms;
 }
 
 .label-filled {
-	color: var(--gray);
 	transition-duration: 200ms;
 }
 
