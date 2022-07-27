@@ -6,8 +6,11 @@ interface ButtonProps {
 
 export default function Button({ onClick, text, color }: ButtonProps): JSX.Element {
 	return (
-		<div>
-			<button onClick={onClick} style={{ backgroundColor: color }}>{text}</button>
-		</div>
-	);
+		<button
+			onClick={onClick}
+			style={{ backgroundColor: color }}
+		>
+			{text}
+		</button>
+	)
 }
