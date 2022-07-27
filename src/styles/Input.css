@@ -29,6 +29,10 @@ input[type="radio"] {
 	border-radius: 0;
 }
 
+.radio-input-container label {
+	cursor: pointer;
+}
+
 .selected {
 	color: var(--primary);
 	transition-duration: 200ms;
