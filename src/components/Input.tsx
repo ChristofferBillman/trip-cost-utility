@@ -35,10 +35,15 @@ export default function Input({ value, onChange, label }: InputProps): JSX.Eleme
 		}
 	}
 
+	const isValid = () => {
+		return !Number.isNaN(Number(value))
+	}
+
 	return (
 		<div className='input-container'>
 			<label className={getLabelClassName(state)}>{label}</label>
 			<input type="text" value={value} onChange={onChange} onFocus={onFocus} onBlur={onBlur} />
+			<p className='err nomargin'> {!isValid() ? 'Must be a number' : ''}</p>
 		</div>
 	);
 }
