@@ -4,6 +4,7 @@
 	--black: #2D2D2D;
 	--gray: #909090;
 	--primary: #8424FF;
+	--red: #FF2424;
 }
 
 html {
@@ -67,11 +68,18 @@ label {
 }
 
 .err {
-	color: #FF2424
+	color: var(--red);
 }
 
 .nomargin {
 	margin: 0;
+}
+
+.row {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
 }
 
 button {
