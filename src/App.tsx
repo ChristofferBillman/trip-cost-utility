@@ -32,17 +32,17 @@ export default function App(): JSX.Element {
 	const [shareButtonOptions, setShareButtonOptions] = useState({ text: 'Copy to clipboard', color: '#1d5c2c' });
 	const [calculateButtonText, setCalculateButtonText] = useState('Calculate');
 
+	const formIsValid = () => {
+		return isValid(distance) && isValid(fuelConsumtpion) && isValid(fuelCost) && isValid(numOfPeople);
+	}
+
 	useEffect(() => {
 		setIsValidForm(formIsValid());
-	}, [distance, fuelConsumtpion, fuelCost, modeOfTransport, numOfPeople])
+	}, [distance, fuelConsumtpion, fuelCost, modeOfTransport, numOfPeople, formIsValid])
 
 	const isValid = (value: string) => {
 		if (value === '') return false
 		return !Number.isNaN(Number(value))
-	}
-
-	const formIsValid = () => {
-		return isValid(distance) && isValid(fuelConsumtpion) && isValid(fuelCost) && isValid(numOfPeople);
 	}
 
 
