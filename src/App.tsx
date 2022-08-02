@@ -35,15 +35,20 @@ export default function App(): JSX.Element {
 	const formIsValid = () => {
 		return isValid(distance) && isValid(fuelConsumtpion) && isValid(fuelCost) && isValid(numOfPeople);
 	}
-
-	useEffect(() => {
-		setIsValidForm(formIsValid());
-	}, [distance, fuelConsumtpion, fuelCost, modeOfTransport, numOfPeople, formIsValid])
-
 	const isValid = (value: string) => {
 		if (value === '') return false
 		return !Number.isNaN(Number(value))
 	}
+
+	// check form validity AFTER values have been updated, thus using useEffect
+	useEffect(() => {
+		setIsValidForm(formIsValid());
+	}, [distance, fuelConsumtpion, fuelCost, modeOfTransport, numOfPeople, formIsValid])
+
+	// when result (i.e when calculate is pressed) changes, scroll to the bottom of the page.
+	useEffect(() => {
+		window.scrollTo(0, 4000)
+	}, [result])
 
 	const getClipboardText = () => {
 		return `🚗 Trip details 🚗
@@ -69,7 +74,8 @@ Calculated with Trip Cost Calculator, made by @popkrull`
 					<VSpace />
 
 					<Input
-						label='Distance (km)'
+						label='Distance'
+						rightLabel='(km)'
 						value={distance}
 						onChange={(event: any) => setDistance(event.target.value)}
 					/>
@@ -93,7 +99,8 @@ Calculated with Trip Cost Calculator, made by @popkrull`
 					<VSpace />
 
 					<Input
-						label={fuel === 'Electricity' ? 'Fuel Consumption (kWh/10km)' : 'Fuel Consumption (L/10km)'}
+						label={fuel === 'Electricity' ? 'Electricity Consumtion' : 'Fuel Consumption'}
+						rightLabel={fuel === 'Electricity' ? '(kWh/10km)' : '(L/10km)'}
 						value={fuelConsumtpion}
 						onChange={(event: any) => setFuelConsumption(event.target.value)}
 					/>
@@ -101,7 +108,8 @@ Calculated with Trip Cost Calculator, made by @popkrull`
 					<VSpace />
 
 					<Input
-						label={fuel === 'Electricity' ? 'Electricty Cost (' + currency + '/kWh)' : 'Fuel Cost (' + currency + '/L)'}
+						label={fuel === 'Electricity' ? 'Electricty Cost' : 'Fuel Cost'}
+						rightLabel={fuel === 'Electricity' ? '(' + currency + '/kWh)' : '(' + currency + '/L)'}
 						value={fuelCost}
 						onChange={(event: any) => setFuelCost(event.target.value)}
 					/>
