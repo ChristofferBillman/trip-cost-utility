@@ -10,6 +10,14 @@ html {
 	font-size: 18px;
 }
 
+p {
+	font-family: 'Inter', sans-serif;
+	font-weight: 700;
+	font-size: 0.80rem;
+	margin-bottom: 1rem;
+	color: var(--gray);
+}
+
 h1 {
 	font-family: 'Inter', sans-serif;
 	font-weight: 700;
@@ -58,6 +66,14 @@ label {
 	color: var(--black);
 }
 
+.err {
+	color: #FF2424
+}
+
+.nomargin {
+	margin: 0;
+}
+
 button {
 	font-family: 'Inter', sans-serif;
 	font-weight: 700;
@@ -69,5 +85,13 @@ button {
 	padding: 1.5rem;
 	margin: 2rem 0 2rem 0;
 	width: 100%;
+	transition-duration: 200ms;
+	cursor: pointer;
+}
+
+button:focus {
+	outline-width: 3px;
+	outline-style: solid;
+	outline-color: var(--primary);
 	transition-duration: 200ms;
 }
