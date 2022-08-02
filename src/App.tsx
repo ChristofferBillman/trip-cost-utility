@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import './styles/App.css';
 import './styles/Input.css';
@@ -19,7 +19,7 @@ export default function App(): JSX.Element {
 
 	const [distance, setDistance] = useState('');
 	const [fuelConsumtpion, setFuelConsumption] = useState('');
-	const [fuel, setFuel] = useState('');
+	const [fuel, setFuel] = useState('Gasoline');
 	const [fuelCost, setFuelCost] = useState('');
 	const [modeOfTransport, setModeOfTransport] = useState('Car');
 
@@ -27,6 +27,24 @@ export default function App(): JSX.Element {
 
 	const [currency] = useState('kr');
 	const [result, setResult] = useState('');
+	const [isValidForm, setIsValidForm] = useState(false);
+
+	const [shareButtonOptions, setShareButtonOptions] = useState({ text: 'Copy to clipboard', color: '#1d5c2c' });
+	const [calculateButtonText, setCalculateButtonText] = useState('Calculate');
+
+	useEffect(() => {
+		setIsValidForm(formIsValid());
+	}, [distance, fuelConsumtpion, fuelCost, modeOfTransport, numOfPeople])
+
+	const isValid = (value: string) => {
+		if (value === '') return false
+		return !Number.isNaN(Number(value))
+	}
+
+	const formIsValid = () => {
+		return isValid(distance) && isValid(fuelConsumtpion) && isValid(fuelCost) && isValid(numOfPeople);
+	}
+
 
 	return (
 		<div className="App">
@@ -86,26 +104,39 @@ export default function App(): JSX.Element {
 				</div>
 
 				<Button
-					text='Calculate'
+					text={calculateButtonText}
 					onClick={() => {
+						if (!isValidForm) {
+							setCalculateButtonText('Please fill in all fields')
+							setTimeout(() => {
+								setCalculateButtonText('Calculate')
+							}, 2000)
+							setResult('')
+							return
+						}
 						const cost = parseFloat(distance) / 10 * parseFloat(fuelConsumtpion) * parseFloat(fuelCost)
-						setResult(cost.toString())
+						setResult(Math.round(cost).toString())
 					}}
+					color={isValidForm ? '#8424FF' : '#909090'}
 				/>
 
 				{result === '' ? '' :
 					<>
 						<div className='margin-container'>
 							<h1>{result + ' ' + currency}</h1>
-							<h2
-								className='black'
-							>
-								{Number(result) / Number(numOfPeople) + ' ' + currency + '/person, split equally'}
+
+							{/* If number of people is more than 1 */}
+							<h2 className='black'>
+								{Number(numOfPeople) !== 1 ? Number(result) / Number(numOfPeople) + ' ' + currency + '/person, split equally' : ''}
 							</h2>
-							{/*<h2>{'Traveling ' + distance + ' km by ' + modeOfTransport + ' using ' + fuel}</h2>*/}
+
+							{/* If number of people is only 1 */}
+							<h2>
+								{Number(numOfPeople) === 1 ? 'Traveling ' + distance + ' km by ' + modeOfTransport + ' using ' + fuel : ''}
+							</h2>
 						</div>
 
-						<Button
+						{/*<Button
 							text='Reset fields'
 							onClick={() => {
 								setDistance('');
@@ -117,6 +148,23 @@ export default function App(): JSX.Element {
 								setResult('');
 							}}
 							color='#FF2424'
+						/>*/}
+
+						<Button
+							text={shareButtonOptions.text}
+							onClick={() => {
+								navigator.clipboard.writeText('A trip of ' + distance + ' km will cost ' + result + ' ' + currency)
+									.then(() => {
+										setShareButtonOptions({ text: 'Copied!', color: '#18ad3b' })
+										setTimeout(() => {
+											setShareButtonOptions({ text: 'Copy to clipboard', color: '#1d5c2c' })
+										}, 2000)
+									})
+									.catch(err => {
+										console.log('Something went wrong', err);
+									})
+							}}
+							color={shareButtonOptions.color}
 						/>
 					</>
 				}
