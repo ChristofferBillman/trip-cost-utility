@@ -45,6 +45,19 @@ export default function App(): JSX.Element {
 		return !Number.isNaN(Number(value))
 	}
 
+	const getClipboardText = () => {
+		return `🚗 Trip details 🚗
+
+Distance: ${distance} km
+Fuel consumption: ${fuelConsumtpion} liters per 100 km
+Fuel cost: ${fuelCost} ${currency} per liter
+
+💸 Cost 💸
+${result} ${currency}${Number(numOfPeople) !== 1 ? ', ' + Number(result) / Number(numOfPeople) + ' ' + currency + '/person, split equally among ' + Number(numOfPeople) + ' people' : ''}
+
+Calculated with Trip Cost Calculator, made by @popkrull`
+	}
+
 
 	return (
 		<div className="App">
@@ -153,7 +166,7 @@ export default function App(): JSX.Element {
 						<Button
 							text={shareButtonOptions.text}
 							onClick={() => {
-								navigator.clipboard.writeText('A trip of ' + distance + ' km will cost ' + result + ' ' + currency)
+								navigator.clipboard.writeText(getClipboardText())
 									.then(() => {
 										setShareButtonOptions({ text: 'Copied!', color: '#18ad3b' })
 										setTimeout(() => {
