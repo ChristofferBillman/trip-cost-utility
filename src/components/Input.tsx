@@ -6,7 +6,9 @@ interface InputProps {
 	value?: string;
 	onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 	label: string;
+	rightLabel?: string;
 }
+
 function getLabelClassName(state: string): string {
 	switch (state) {
 		case 'blur':
@@ -21,7 +23,7 @@ function getLabelClassName(state: string): string {
 	}
 }
 
-export default function Input({ value, onChange, label }: InputProps): JSX.Element {
+export default function Input({ value, onChange, label, rightLabel }: InputProps): JSX.Element {
 
 	const [state, setState] = useState('blur');
 
@@ -41,7 +43,10 @@ export default function Input({ value, onChange, label }: InputProps): JSX.Eleme
 
 	return (
 		<div className='input-container'>
-			<label className={getLabelClassName(state)}>{label}</label>
+			<div className='row'>
+				<label className={getLabelClassName(state)}>{label}</label>
+				<label className={getLabelClassName(state)}>{rightLabel}</label>
+			</div>
 			<input type="text" value={value} onChange={onChange} onFocus={onFocus} onBlur={onBlur} />
 			<p className='err nomargin'> {!isValid() ? 'Must be a number' : ''}</p>
 		</div>
