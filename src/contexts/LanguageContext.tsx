@@ -26,6 +26,7 @@ export type Language = {
 	Currency: string;
 	CostPerPerson: string;
 	MustBeNumber: string;
+	MustBePositive: string;
 	NotYetImplemented: string;
 	isDisabled: string;
 	getClipboardText: (distance: string, fuelConsumption: string, fuelCost: string,
@@ -86,6 +87,7 @@ const translations: Language[] = [
 		Currency: '$',
 		CostPerPerson: '/person, split equally',
 		MustBeNumber: 'Must be a number',
+		MustBePositive: 'Must be positive',
 		NotYetImplemented: 'is currently unsupported',
 		isDisabled: 'Is currrently disabled. Please try another mode of transport.',
 		getClipboardText: (distance: string, fuelConsumption: string, fuelCost: string,
@@ -128,6 +130,7 @@ const translations: Language[] = [
 		Currency: 'kr',
 		CostPerPerson: '/person, delat lika',
 		MustBeNumber: 'Måste vara ett nummer',
+		MustBePositive: 'Måste vara positivt',
 		NotYetImplemented: 'stöds ej ännu',
 		isDisabled: 'Stöds ej ännu. Välj ett annat transportsätt.',
 		getClipboardText: (distance: string, fuelConsumption: string, fuelCost: string,

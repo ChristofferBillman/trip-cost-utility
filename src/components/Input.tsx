@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useLangContext } from '../contexts/LanguageContext';
+import { useEffect, useState } from 'react';
+import { Language, useLangContext } from '../contexts/LanguageContext';
 
 import '../styles/Input.css';
 
@@ -26,9 +26,15 @@ function getLabelClassName(state: string): string {
 
 export default function Input({ value, onChange, label, rightLabel }: InputProps): JSX.Element {
 
-	const locale: any = useLangContext()
+	const locale: Language = useLangContext()
 
 	const [state, setState] = useState('blur');
+	const [err, setErr] = useState('');
+
+	useEffect(() => {
+		if (Number.isNaN(Number(value))) setErr(locale.MustBeNumber);
+		else if (Number(value) < 0) setErr(locale.MustBePositive);
+	}, [value])
 
 	const onFocus = () => setState('focus')
 	const onBlur = () => {
@@ -41,7 +47,8 @@ export default function Input({ value, onChange, label, rightLabel }: InputProps
 	}
 
 	const isValid = () => {
-		return !Number.isNaN(Number(value))
+		if (value === '') return true
+		return !Number.isNaN(Number(value)) && Number(value) > 0;
 	}
 
 	return (
@@ -51,7 +58,7 @@ export default function Input({ value, onChange, label, rightLabel }: InputProps
 				<label className={getLabelClassName(state)}>{rightLabel}</label>
 			</div>
 			<input type="text" value={value} onChange={onChange} onFocus={onFocus} onBlur={onBlur} />
-			<p className={`message err nomargin ' + ${isValid() ? 'hide' : 'show'}`}> {locale.MustBeNumber}</p>
+			<p className={`message err nomargin ' + ${isValid() ? 'hide' : 'show'}`}> {err}</p>
 		</div>
 	);
 }

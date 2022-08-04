@@ -31,7 +31,7 @@ export default function App(): JSX.Element {
 
 	const isValid = (value: string) => {
 		if (value === '') return false
-		return !Number.isNaN(Number(value))
+		return !Number.isNaN(Number(value)) && Number(value) > 0;
 	}
 
 	// check form validity AFTER values have been updated, thus using useEffect
