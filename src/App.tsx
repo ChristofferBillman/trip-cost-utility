@@ -73,80 +73,79 @@ export default function App(): JSX.Element {
 
 					<RadioInput
 						options={locale.ModesOfTransport}
+						disabledOptions={[locale.ModesOfTransport[1], locale.ModesOfTransport[2], locale.ModesOfTransport[3]]}
 						selectedOption={modeOfTransport}
 						setOption={setModeOfTransport}
 					/>
 
 					<VSpace />
+				</div>
+				<div className='margin-container'>
+					<RadioInput
+						options={locale.Fuels[modeOfTransport]}
+						selectedOption={fuel}
+						setOption={setFuel}
+					/>
 
-					{modeOfTransport === locale.ModesOfTransport[0] ?
-						(
-							<>
-								<RadioInput
-									options={locale.Fuels[modeOfTransport]}
-									selectedOption={fuel}
-									setOption={setFuel}
-								/>
+					<VSpace />
 
-								<VSpace />
+					<Input
+						label={fuel === locale.Fuels[modeOfTransport][2] ? locale.ElectricityConsumption : locale.FuelConsumption}
+						rightLabel={fuel === locale.Fuels[modeOfTransport][2] ? '(kWh/10km)' : '(L/10km)'}
+						value={fuelConsumtpion}
+						onChange={(event: any) => setFuelConsumption(event.target.value)}
+					/>
 
-								<Input
-									label={fuel === locale.Fuels[modeOfTransport][2] ? locale.ElectricityConsumption : locale.FuelConsumption}
-									rightLabel={fuel === locale.Fuels[modeOfTransport][2] ? '(kWh/10km)' : '(L/10km)'}
-									value={fuelConsumtpion}
-									onChange={(event: any) => setFuelConsumption(event.target.value)}
-								/>
+					<VSpace />
 
-								<VSpace />
+					<Input
+						label={fuel === locale.Fuels[modeOfTransport][2] ? locale.ElectricityCost : locale.FuelCost}
+						rightLabel={fuel === locale.Fuels[modeOfTransport[2]] ? '(' + currency + '/kWh)' : '(' + currency + '/L)'}
+						value={fuelCost}
+						onChange={(event: any) => setFuelCost(event.target.value)}
+					/>
 
-								<Input
-									label={fuel === locale.Fuels[modeOfTransport][2] ? locale.ElectricityCost : locale.FuelCost}
-									rightLabel={fuel === locale.Fuels[modeOfTransport[2]] ? '(' + currency + '/kWh)' : '(' + currency + '/L)'}
-									value={fuelCost}
-									onChange={(event: any) => setFuelCost(event.target.value)}
-								/>
+					<VSpace />
 
-								<VSpace />
+					<Input
+						label={locale.NumOfPeople}
+						value={String(numOfPeople)}
+						onChange={(event: any) => setNumOfPeople(event.target.value)}
+					/>
+				</div>
+				<Button
+					text={calculateButtonText}
+					onClick={() => {
+						if (!isValidForm) {
+							setCalculateButtonText(locale.FillAllFields)
+							setTimeout(() => {
+								setCalculateButtonText(locale.Calculate)
+							}, 2000)
+							setResult('')
+							return
+						}
+						const cost = parseFloat(distance) / 10 * parseFloat(fuelConsumtpion) * parseFloat(fuelCost)
+						setResult(Math.round(cost).toString())
+					}}
+					color={isValidForm ? '#8424FF' : '#909090'}
+				/>
 
-								<Input
-									label={locale.NumOfPeople}
-									value={String(numOfPeople)}
-									onChange={(event: any) => setNumOfPeople(event.target.value)}
-								/>
+				{result === '' ? '' :
+					<>
+						<div className='margin-container'>
+							<h1>{result + ' ' + currency}</h1>
 
-								<Button
-									text={calculateButtonText}
-									onClick={() => {
-										if (!isValidForm) {
-											setCalculateButtonText(locale.FillAllFields)
-											setTimeout(() => {
-												setCalculateButtonText(locale.Calculate)
-											}, 2000)
-											setResult('')
-											return
-										}
-										const cost = parseFloat(distance) / 10 * parseFloat(fuelConsumtpion) * parseFloat(fuelCost)
-										setResult(Math.round(cost).toString())
-									}}
-									color={isValidForm ? '#8424FF' : '#909090'}
-								/>
+							{/* If number of people is more than 1 */}
+							<h2 className='black'>
+								{Number(numOfPeople) !== 1 ? Number(result) / Number(numOfPeople) + ' ' + currency + locale.CostPerPerson : ''}
+							</h2>
 
-								{result === '' ? '' :
-									<>
-										<div className='margin-container'>
-											<h1>{result + ' ' + currency}</h1>
+							{/* If number of people is only 1 */}
+							<h2>
+								{Number(numOfPeople) === 1 ? 'Traveling ' + distance + ' km by ' + modeOfTransport + ' using ' + fuel : ''}
+							</h2>
 
-											{/* If number of people is more than 1 */}
-											<h2 className='black'>
-												{Number(numOfPeople) !== 1 ? Number(result) / Number(numOfPeople) + ' ' + currency + locale.CostPerPerson : ''}
-											</h2>
-
-											{/* If number of people is only 1 */}
-											<h2>
-												{Number(numOfPeople) === 1 ? 'Traveling ' + distance + ' km by ' + modeOfTransport + ' using ' + fuel : ''}
-											</h2>
-
-											{/*<Button
+							{/*<Button
 												text='Reset fields'
 												onClick={() => {
 													setDistance('');
@@ -160,34 +159,27 @@ export default function App(): JSX.Element {
 												color='#FF2424'
 											/>*/}
 
-											<Button
-												text={shareButtonOptions.text}
-												onClick={() => {
-													navigator.clipboard.writeText(getClipboardText())
-														.then(() => {
-															setShareButtonOptions({ text: locale.Copied, color: '#18ad3b' })
-															setTimeout(() => {
-																setShareButtonOptions({ text: locale.CopyToClipboard, color: '#1d5c2c' })
-															}, 2000)
-														})
-														.catch(err => {
-															console.log('Something went wrong', err);
-														})
-												}}
-												color={shareButtonOptions.color}
-											/>
+							<Button
+								text={shareButtonOptions.text}
+								onClick={() => {
+									navigator.clipboard.writeText(getClipboardText())
+										.then(() => {
+											setShareButtonOptions({ text: locale.Copied, color: '#18ad3b' })
+											setTimeout(() => {
+												setShareButtonOptions({ text: locale.CopyToClipboard, color: '#1d5c2c' })
+											}, 2000)
+										})
+										.catch(err => {
+											console.log('Something went wrong', err);
+										})
+								}}
+								color={shareButtonOptions.color}
+							/>
 
-										</div>
-									</>
-								}
-							</>
-						) : (
-							<>
-								<h2 className='warn'> {locale.NotYetImplemented} </h2>
-							</>
-						)}
-				</div>
-			</div >
-		</div>
+						</div>
+					</>
+				}
+			</div>
+		</div >
 	);
 }

@@ -3,6 +3,7 @@
 :root {
 	--black: #2D2D2D;
 	--gray: #909090;
+	--lightgray: #c5c5c5;
 	--primary: #8424FF;
 	--red: #FF2424;
 }
@@ -72,7 +73,12 @@ label {
 }
 
 .warn {
-	color: '#ffa724'
+	color: #ffa724;
+}
+
+.disabled {
+	color: var(--lightgray);
+	cursor: not-allowed;
 }
 
 .nomargin {

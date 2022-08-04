@@ -27,6 +27,7 @@ export type Language = {
 	CostPerPerson: string;
 	MustBeNumber: string;
 	NotYetImplemented: string;
+	isDisabled: string;
 	getClipboardText: (distance: string, fuelConsumption: string, fuelCost: string,
 		currency: string, result: string, numOfPeople: string) => string;
 }
@@ -85,7 +86,8 @@ const translations: Language[] = [
 		Currency: '$',
 		CostPerPerson: '/person, split equally',
 		MustBeNumber: 'Must be a number',
-		NotYetImplemented: 'Currently unsupported',
+		NotYetImplemented: 'is currently unsupported',
+		isDisabled: 'Is currrently disabled. Please try another mode of transport.',
 		getClipboardText: (distance: string, fuelConsumption: string, fuelCost: string,
 			currency: string, result: string, numOfPeople: string) => {
 			return `🚗 Trip details 🚗
@@ -126,7 +128,8 @@ const translations: Language[] = [
 		Currency: 'kr',
 		CostPerPerson: '/person, delat lika',
 		MustBeNumber: 'Måste vara ett nummer',
-		NotYetImplemented: 'Stöds ej ännu',
+		NotYetImplemented: 'stöds ej ännu',
+		isDisabled: 'Stöds ej ännu. Välj ett annat transportsätt.',
 		getClipboardText: (distance: string, fuelConsumption: string, fuelCost: string,
 			currency: string, result: string, numOfPeople: string) => {
 			return `🚗 Resedetaljer 🚗
