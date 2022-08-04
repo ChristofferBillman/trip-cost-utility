@@ -5,7 +5,7 @@ interface languageContextProps {
 	language: string;
 }
 
-type Language = {
+export type Language = {
 	Name: string;
 	Title: string;
 	Description: string;
@@ -26,6 +26,7 @@ type Language = {
 	Currency: string;
 	CostPerPerson: string;
 	MustBeNumber: string;
+	NotYetImplemented: string;
 	getClipboardText: (distance: string, fuelConsumption: string, fuelCost: string,
 		currency: string, result: string, numOfPeople: string) => string;
 }
@@ -84,6 +85,7 @@ const translations: Language[] = [
 		Currency: '$',
 		CostPerPerson: '/person, split equally',
 		MustBeNumber: 'Must be a number',
+		NotYetImplemented: 'Currently unsupported',
 		getClipboardText: (distance: string, fuelConsumption: string, fuelCost: string,
 			currency: string, result: string, numOfPeople: string) => {
 			return `🚗 Trip details 🚗
@@ -124,6 +126,7 @@ const translations: Language[] = [
 		Currency: 'kr',
 		CostPerPerson: '/person, delat lika',
 		MustBeNumber: 'Måste vara ett nummer',
+		NotYetImplemented: 'Stöds ej ännu',
 		getClipboardText: (distance: string, fuelConsumption: string, fuelCost: string,
 			currency: string, result: string, numOfPeople: string) => {
 			return `🚗 Resedetaljer 🚗

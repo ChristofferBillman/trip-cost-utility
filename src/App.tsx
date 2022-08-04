@@ -7,12 +7,12 @@ import Input from './components/Input';
 import RadioInput from './components/RadioInput';
 import Button from './components/Button';
 import VSpace from './components/VSpace';
-import { useLangContext } from './contexts/LanguageContext';
+import { useLangContext, Language } from './contexts/LanguageContext';
 
 export default function App(): JSX.Element {
 
 
-	const locale: any = useLangContext();
+	const locale: Language = useLangContext();
 
 	const [distance, setDistance] = useState('');
 	const [fuelConsumtpion, setFuelConsumption] = useState('');
@@ -79,106 +79,115 @@ export default function App(): JSX.Element {
 
 					<VSpace />
 
-					<RadioInput
-						options={locale.Fuels[modeOfTransport]}
-						selectedOption={fuel}
-						setOption={setFuel}
-					/>
+					{modeOfTransport === locale.ModesOfTransport[0] ?
+						(
+							<>
+								<RadioInput
+									options={locale.Fuels[modeOfTransport]}
+									selectedOption={fuel}
+									setOption={setFuel}
+								/>
 
-					<VSpace />
+								<VSpace />
 
-					<Input
-						label={fuel === locale.Fuels[modeOfTransport][2] ? locale.ElectricityConsumption : locale.FuelConsumption}
-						rightLabel={fuel === locale.Fuels[modeOfTransport][2] ? '(kWh/10km)' : '(L/10km)'}
-						value={fuelConsumtpion}
-						onChange={(event: any) => setFuelConsumption(event.target.value)}
-					/>
+								<Input
+									label={fuel === locale.Fuels[modeOfTransport][2] ? locale.ElectricityConsumption : locale.FuelConsumption}
+									rightLabel={fuel === locale.Fuels[modeOfTransport][2] ? '(kWh/10km)' : '(L/10km)'}
+									value={fuelConsumtpion}
+									onChange={(event: any) => setFuelConsumption(event.target.value)}
+								/>
 
-					<VSpace />
+								<VSpace />
 
-					<Input
-						label={fuel === locale.Fuels[modeOfTransport][2] ? locale.ElectricityCost : locale.FuelCost}
-						rightLabel={fuel === locale.Fuels[modeOfTransport[2]] ? '(' + currency + '/kWh)' : '(' + currency + '/L)'}
-						value={fuelCost}
-						onChange={(event: any) => setFuelCost(event.target.value)}
-					/>
+								<Input
+									label={fuel === locale.Fuels[modeOfTransport][2] ? locale.ElectricityCost : locale.FuelCost}
+									rightLabel={fuel === locale.Fuels[modeOfTransport[2]] ? '(' + currency + '/kWh)' : '(' + currency + '/L)'}
+									value={fuelCost}
+									onChange={(event: any) => setFuelCost(event.target.value)}
+								/>
 
-					<VSpace />
+								<VSpace />
 
-					<Input
-						label={locale.NumOfPeople}
-						value={String(numOfPeople)}
-						onChange={(event: any) => setNumOfPeople(event.target.value)}
-					/>
+								<Input
+									label={locale.NumOfPeople}
+									value={String(numOfPeople)}
+									onChange={(event: any) => setNumOfPeople(event.target.value)}
+								/>
 
+								<Button
+									text={calculateButtonText}
+									onClick={() => {
+										if (!isValidForm) {
+											setCalculateButtonText(locale.FillAllFields)
+											setTimeout(() => {
+												setCalculateButtonText(locale.Calculate)
+											}, 2000)
+											setResult('')
+											return
+										}
+										const cost = parseFloat(distance) / 10 * parseFloat(fuelConsumtpion) * parseFloat(fuelCost)
+										setResult(Math.round(cost).toString())
+									}}
+									color={isValidForm ? '#8424FF' : '#909090'}
+								/>
+
+								{result === '' ? '' :
+									<>
+										<div className='margin-container'>
+											<h1>{result + ' ' + currency}</h1>
+
+											{/* If number of people is more than 1 */}
+											<h2 className='black'>
+												{Number(numOfPeople) !== 1 ? Number(result) / Number(numOfPeople) + ' ' + currency + locale.CostPerPerson : ''}
+											</h2>
+
+											{/* If number of people is only 1 */}
+											<h2>
+												{Number(numOfPeople) === 1 ? 'Traveling ' + distance + ' km by ' + modeOfTransport + ' using ' + fuel : ''}
+											</h2>
+
+											{/*<Button
+												text='Reset fields'
+												onClick={() => {
+													setDistance('');
+													setFuelConsumption('');
+													setFuelCost('');
+													setModeOfTransport('Car');
+													setFuel('');
+													setNumOfPeople('');
+													setResult('');
+												}}
+												color='#FF2424'
+											/>*/}
+
+											<Button
+												text={shareButtonOptions.text}
+												onClick={() => {
+													navigator.clipboard.writeText(getClipboardText())
+														.then(() => {
+															setShareButtonOptions({ text: locale.Copied, color: '#18ad3b' })
+															setTimeout(() => {
+																setShareButtonOptions({ text: locale.CopyToClipboard, color: '#1d5c2c' })
+															}, 2000)
+														})
+														.catch(err => {
+															console.log('Something went wrong', err);
+														})
+												}}
+												color={shareButtonOptions.color}
+											/>
+
+										</div>
+									</>
+								}
+							</>
+						) : (
+							<>
+								<h2 className='warn'> {locale.NotYetImplemented} </h2>
+							</>
+						)}
 				</div>
-
-				<Button
-					text={calculateButtonText}
-					onClick={() => {
-						if (!isValidForm) {
-							setCalculateButtonText(locale.FillAllFields)
-							setTimeout(() => {
-								setCalculateButtonText(locale.Calculate)
-							}, 2000)
-							setResult('')
-							return
-						}
-						const cost = parseFloat(distance) / 10 * parseFloat(fuelConsumtpion) * parseFloat(fuelCost)
-						setResult(Math.round(cost).toString())
-					}}
-					color={isValidForm ? '#8424FF' : '#909090'}
-				/>
-
-				{result === '' ? '' :
-					<>
-						<div className='margin-container'>
-							<h1>{result + ' ' + currency}</h1>
-
-							{/* If number of people is more than 1 */}
-							<h2 className='black'>
-								{Number(numOfPeople) !== 1 ? Number(result) / Number(numOfPeople) + ' ' + currency + locale.CostPerPerson : ''}
-							</h2>
-
-							{/* If number of people is only 1 */}
-							<h2>
-								{Number(numOfPeople) === 1 ? 'Traveling ' + distance + ' km by ' + modeOfTransport + ' using ' + fuel : ''}
-							</h2>
-						</div>
-
-						{/*<Button
-							text='Reset fields'
-							onClick={() => {
-								setDistance('');
-								setFuelConsumption('');
-								setFuelCost('');
-								setModeOfTransport('Car');
-								setFuel('');
-								setNumOfPeople('');
-								setResult('');
-							}}
-							color='#FF2424'
-						/>*/}
-
-						<Button
-							text={shareButtonOptions.text}
-							onClick={() => {
-								navigator.clipboard.writeText(getClipboardText())
-									.then(() => {
-										setShareButtonOptions({ text: locale.Copied, color: '#18ad3b' })
-										setTimeout(() => {
-											setShareButtonOptions({ text: locale.CopyToClipboard, color: '#1d5c2c' })
-										}, 2000)
-									})
-									.catch(err => {
-										console.log('Something went wrong', err);
-									})
-							}}
-							color={shareButtonOptions.color}
-						/>
-					</>
-				}
-			</div>
-		</div >
+			</div >
+		</div>
 	);
 }
