@@ -67,6 +67,7 @@ a {
 	max-width: 600px;
 	position: relative;
 	min-height: 100vh;
+	justify-content: space-between;
 }
 
 .margin-container {
@@ -111,8 +112,8 @@ a {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	position: absolute;
-	bottom: 2rem;
+	position: relative;
+	padding: 2rem 0 2rem 0;
 }
 
 button {

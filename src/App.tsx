@@ -56,97 +56,97 @@ export default function App(): JSX.Element {
 	return (
 		<div className="App">
 			<div className='app-column'>
-				<div className='margin-container'>
+				<div>
+					<div className='margin-container'>
 
-					<h1>{locale.Title}</h1>
-					<h2>{locale.Description}</h2>
+						<h1>{locale.Title}</h1>
+						<h2>{locale.Description}</h2>
 
-					<VSpace />
+						<VSpace />
 
-					<Input
-						label={locale.Distance}
-						rightLabel='(km)'
-						value={distance}
-						onChange={(event: any) => setDistance(event.target.value)}
+						<Input
+							label={locale.Distance}
+							rightLabel='(km)'
+							value={distance}
+							onChange={(event: any) => setDistance(event.target.value)}
+						/>
+
+						<VSpace />
+
+						<RadioInput
+							options={locale.ModesOfTransport}
+							disabledOptions={[locale.ModesOfTransport[1], locale.ModesOfTransport[2], locale.ModesOfTransport[3]]}
+							selectedOption={modeOfTransport}
+							setOption={setModeOfTransport}
+						/>
+
+						<VSpace />
+
+						<RadioInput
+							options={locale.Fuels[modeOfTransport]}
+							selectedOption={fuel}
+							setOption={setFuel}
+						/>
+
+						<VSpace />
+
+						<Input
+							label={fuel === locale.Fuels[modeOfTransport][2] ? locale.ElectricityConsumption : locale.FuelConsumption}
+							rightLabel={fuel === locale.Fuels[modeOfTransport][2] ? '(kWh/10km)' : '(L/10km)'}
+							value={fuelConsumtpion}
+							onChange={(event: any) => setFuelConsumption(event.target.value)}
+						/>
+
+						<VSpace />
+
+						<Input
+							label={fuel === locale.Fuels[modeOfTransport][2] ? locale.ElectricityCost : locale.FuelCost}
+							rightLabel={fuel === locale.Fuels[modeOfTransport[2]] ? '(' + currency + '/kWh)' : '(' + currency + '/L)'}
+							value={fuelCost}
+							onChange={(event: any) => setFuelCost(event.target.value)}
+						/>
+
+						<VSpace />
+
+						<Input
+							label={locale.NumOfPeople}
+							value={String(numOfPeople)}
+							onChange={(event: any) => setNumOfPeople(event.target.value)}
+						/>
+					</div>
+					<Button
+						text={calculateButtonText}
+						onClick={() => {
+							if (!isValidForm) {
+								setCalculateButtonText(locale.FillAllFields)
+								setTimeout(() => {
+									setCalculateButtonText(locale.Calculate)
+								}, 2000)
+								setResult('')
+								return
+							}
+							const cost = parseFloat(distance) / 10 * parseFloat(fuelConsumtpion) * parseFloat(fuelCost)
+							setResult(Math.round(cost).toString())
+						}}
+						color={isValidForm ? '#8424FF' : '#909090'}
 					/>
 
-					<VSpace />
+					{result === '' ? '' :
+						<>
+							<div className='margin-container'>
+								<h1>{result + ' ' + currency}</h1>
 
-					<RadioInput
-						options={locale.ModesOfTransport}
-						disabledOptions={[locale.ModesOfTransport[1], locale.ModesOfTransport[2], locale.ModesOfTransport[3]]}
-						selectedOption={modeOfTransport}
-						setOption={setModeOfTransport}
-					/>
+								{/* If number of people is more than 1 */}
+								<h2 className='black'>
+									{Number(numOfPeople) !== 1 ? Number(result) / Number(numOfPeople) + ' ' + currency + locale.CostPerPerson : ''}
+								</h2>
 
-					<VSpace />
-				</div>
-				<div className='margin-container'>
-					<RadioInput
-						options={locale.Fuels[modeOfTransport]}
-						selectedOption={fuel}
-						setOption={setFuel}
-					/>
+								{/* If number of people is only 1 */}
+								<h2>
+									{Number(numOfPeople) === 1 ? 'Traveling ' + distance + ' km by ' + modeOfTransport + ' using ' + fuel : ''}
+								</h2>
 
-					<VSpace />
-
-					<Input
-						label={fuel === locale.Fuels[modeOfTransport][2] ? locale.ElectricityConsumption : locale.FuelConsumption}
-						rightLabel={fuel === locale.Fuels[modeOfTransport][2] ? '(kWh/10km)' : '(L/10km)'}
-						value={fuelConsumtpion}
-						onChange={(event: any) => setFuelConsumption(event.target.value)}
-					/>
-
-					<VSpace />
-
-					<Input
-						label={fuel === locale.Fuels[modeOfTransport][2] ? locale.ElectricityCost : locale.FuelCost}
-						rightLabel={fuel === locale.Fuels[modeOfTransport[2]] ? '(' + currency + '/kWh)' : '(' + currency + '/L)'}
-						value={fuelCost}
-						onChange={(event: any) => setFuelCost(event.target.value)}
-					/>
-
-					<VSpace />
-
-					<Input
-						label={locale.NumOfPeople}
-						value={String(numOfPeople)}
-						onChange={(event: any) => setNumOfPeople(event.target.value)}
-					/>
-				</div>
-				<Button
-					text={calculateButtonText}
-					onClick={() => {
-						if (!isValidForm) {
-							setCalculateButtonText(locale.FillAllFields)
-							setTimeout(() => {
-								setCalculateButtonText(locale.Calculate)
-							}, 2000)
-							setResult('')
-							return
-						}
-						const cost = parseFloat(distance) / 10 * parseFloat(fuelConsumtpion) * parseFloat(fuelCost)
-						setResult(Math.round(cost).toString())
-					}}
-					color={isValidForm ? '#8424FF' : '#909090'}
-				/>
-
-				{result === '' ? '' :
-					<>
-						<div className='margin-container'>
-							<h1>{result + ' ' + currency}</h1>
-
-							{/* If number of people is more than 1 */}
-							<h2 className='black'>
-								{Number(numOfPeople) !== 1 ? Number(result) / Number(numOfPeople) + ' ' + currency + locale.CostPerPerson : ''}
-							</h2>
-
-							{/* If number of people is only 1 */}
-							<h2>
-								{Number(numOfPeople) === 1 ? 'Traveling ' + distance + ' km by ' + modeOfTransport + ' using ' + fuel : ''}
-							</h2>
-
-							{/*<Button
+								{/*<Button
 												text='Reset fields'
 												onClick={() => {
 													setDistance('');
@@ -159,26 +159,27 @@ export default function App(): JSX.Element {
 												}}
 												color='#FF2424'
 										/>*/}
-						</div>
+							</div>
 
-						<Button
-							text={shareButtonOptions.text}
-							onClick={() => {
-								navigator.clipboard.writeText(getClipboardText())
-									.then(() => {
-										setShareButtonOptions({ text: locale.Copied, color: '#18ad3b' })
-										setTimeout(() => {
-											setShareButtonOptions({ text: locale.CopyToClipboard, color: '#1d5c2c' })
-										}, 2000)
-									})
-									.catch(err => {
-										console.log('Something went wrong', err);
-									})
-							}}
-							color={shareButtonOptions.color}
-						/>
-					</>
-				}
+							<Button
+								text={shareButtonOptions.text}
+								onClick={() => {
+									navigator.clipboard.writeText(getClipboardText())
+										.then(() => {
+											setShareButtonOptions({ text: locale.Copied, color: '#18ad3b' })
+											setTimeout(() => {
+												setShareButtonOptions({ text: locale.CopyToClipboard, color: '#1d5c2c' })
+											}, 2000)
+										})
+										.catch(err => {
+											console.log('Something went wrong', err);
+										})
+								}}
+								color={shareButtonOptions.color}
+							/>
+						</>
+					}
+				</div>
 				<Footer />
 			</div>
 		</div >
