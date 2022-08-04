@@ -7,34 +7,28 @@ import Input from './components/Input';
 import RadioInput from './components/RadioInput';
 import Button from './components/Button';
 import VSpace from './components/VSpace';
-
-const fuels: any = {
-	'Car': ['Gasoline', 'Diesel', 'Electricity', 'Ethanol'],
-	'Train': [],
-	'Plane': [],
-	'Bike': [],
-}
+import { useLangContext } from './contexts/LanguageContext';
 
 export default function App(): JSX.Element {
 
+
+	const locale: any = useLangContext();
+
 	const [distance, setDistance] = useState('');
 	const [fuelConsumtpion, setFuelConsumption] = useState('');
-	const [fuel, setFuel] = useState('Gasoline');
+	const [fuel, setFuel] = useState(locale.Fuels[0]);
 	const [fuelCost, setFuelCost] = useState('');
-	const [modeOfTransport, setModeOfTransport] = useState('Car');
+	const [modeOfTransport, setModeOfTransport] = useState(locale.ModesOfTransport[0]);
 
 	const [numOfPeople, setNumOfPeople] = useState('');
 
-	const [currency] = useState('kr');
+	const [currency] = useState(locale.Currency);
 	const [result, setResult] = useState('');
 	const [isValidForm, setIsValidForm] = useState(false);
 
-	const [shareButtonOptions, setShareButtonOptions] = useState({ text: 'Copy to clipboard', color: '#1d5c2c' });
-	const [calculateButtonText, setCalculateButtonText] = useState('Calculate');
+	const [shareButtonOptions, setShareButtonOptions] = useState({ text: locale.CopyToClipboard, color: '#1d5c2c' });
+	const [calculateButtonText, setCalculateButtonText] = useState(locale.Calculate);
 
-	const formIsValid = () => {
-		return isValid(distance) && isValid(fuelConsumtpion) && isValid(fuelCost) && isValid(numOfPeople);
-	}
 	const isValid = (value: string) => {
 		if (value === '') return false
 		return !Number.isNaN(Number(value))
@@ -42,8 +36,11 @@ export default function App(): JSX.Element {
 
 	// check form validity AFTER values have been updated, thus using useEffect
 	useEffect(() => {
+		const formIsValid = () => {
+			return isValid(distance) && isValid(fuelConsumtpion) && isValid(fuelCost) && isValid(numOfPeople);
+		}
 		setIsValidForm(formIsValid());
-	}, [distance, fuelConsumtpion, fuelCost, modeOfTransport, numOfPeople, formIsValid])
+	}, [distance, fuelConsumtpion, fuelCost, modeOfTransport, numOfPeople])
 
 	// when result (i.e when calculate is pressed) changes, scroll to the bottom of the page.
 	useEffect(() => {
@@ -51,16 +48,7 @@ export default function App(): JSX.Element {
 	}, [result])
 
 	const getClipboardText = () => {
-		return `🚗 Trip details 🚗
-
-Distance: ${distance} km
-Fuel consumption: ${fuelConsumtpion} liters per 100 km
-Fuel cost: ${fuelCost} ${currency} per liter
-
-💸 Cost 💸
-${result} ${currency}${Number(numOfPeople) !== 1 ? ', ' + Number(result) / Number(numOfPeople) + ' ' + currency + '/person, split equally among ' + Number(numOfPeople) + ' people' : ''}
-
-Calculated with Trip Cost Calculator, made by @popkrull`
+		return locale.getClipboardText(distance, fuelConsumtpion, fuelCost, currency, result, numOfPeople);
 	}
 
 
@@ -68,13 +56,14 @@ Calculated with Trip Cost Calculator, made by @popkrull`
 		<div className="App">
 			<div className='app-column'>
 				<div className='margin-container'>
-					<h1>Trip Cost Calculator</h1>
-					<h2>A tool to help you calculate the cost of your travels</h2>
+
+					<h1>{locale.Title}</h1>
+					<h2>{locale.Description}</h2>
 
 					<VSpace />
 
 					<Input
-						label='Distance'
+						label={locale.Distance}
 						rightLabel='(km)'
 						value={distance}
 						onChange={(event: any) => setDistance(event.target.value)}
@@ -83,7 +72,7 @@ Calculated with Trip Cost Calculator, made by @popkrull`
 					<VSpace />
 
 					<RadioInput
-						options={['Car', 'Train', 'Plane', 'Bike']}
+						options={locale.ModesOfTransport}
 						selectedOption={modeOfTransport}
 						setOption={setModeOfTransport}
 					/>
@@ -91,7 +80,7 @@ Calculated with Trip Cost Calculator, made by @popkrull`
 					<VSpace />
 
 					<RadioInput
-						options={fuels[modeOfTransport]}
+						options={locale.Fuels[modeOfTransport]}
 						selectedOption={fuel}
 						setOption={setFuel}
 					/>
@@ -99,8 +88,8 @@ Calculated with Trip Cost Calculator, made by @popkrull`
 					<VSpace />
 
 					<Input
-						label={fuel === 'Electricity' ? 'Electricity Consumtion' : 'Fuel Consumption'}
-						rightLabel={fuel === 'Electricity' ? '(kWh/10km)' : '(L/10km)'}
+						label={fuel === locale.Fuels[modeOfTransport][2] ? locale.ElectricityConsumption : locale.FuelConsumption}
+						rightLabel={fuel === locale.Fuels[modeOfTransport][2] ? '(kWh/10km)' : '(L/10km)'}
 						value={fuelConsumtpion}
 						onChange={(event: any) => setFuelConsumption(event.target.value)}
 					/>
@@ -108,8 +97,8 @@ Calculated with Trip Cost Calculator, made by @popkrull`
 					<VSpace />
 
 					<Input
-						label={fuel === 'Electricity' ? 'Electricty Cost' : 'Fuel Cost'}
-						rightLabel={fuel === 'Electricity' ? '(' + currency + '/kWh)' : '(' + currency + '/L)'}
+						label={fuel === locale.Fuels[modeOfTransport][2] ? locale.ElectricityCost : locale.FuelCost}
+						rightLabel={fuel === locale.Fuels[modeOfTransport[2]] ? '(' + currency + '/kWh)' : '(' + currency + '/L)'}
 						value={fuelCost}
 						onChange={(event: any) => setFuelCost(event.target.value)}
 					/>
@@ -117,7 +106,7 @@ Calculated with Trip Cost Calculator, made by @popkrull`
 					<VSpace />
 
 					<Input
-						label={'Number of people'}
+						label={locale.NumOfPeople}
 						value={String(numOfPeople)}
 						onChange={(event: any) => setNumOfPeople(event.target.value)}
 					/>
@@ -128,9 +117,9 @@ Calculated with Trip Cost Calculator, made by @popkrull`
 					text={calculateButtonText}
 					onClick={() => {
 						if (!isValidForm) {
-							setCalculateButtonText('Please fill in all fields')
+							setCalculateButtonText(locale.FillAllFields)
 							setTimeout(() => {
-								setCalculateButtonText('Calculate')
+								setCalculateButtonText(locale.Calculate)
 							}, 2000)
 							setResult('')
 							return
@@ -148,7 +137,7 @@ Calculated with Trip Cost Calculator, made by @popkrull`
 
 							{/* If number of people is more than 1 */}
 							<h2 className='black'>
-								{Number(numOfPeople) !== 1 ? Number(result) / Number(numOfPeople) + ' ' + currency + '/person, split equally' : ''}
+								{Number(numOfPeople) !== 1 ? Number(result) / Number(numOfPeople) + ' ' + currency + locale.CostPerPerson : ''}
 							</h2>
 
 							{/* If number of people is only 1 */}
@@ -176,9 +165,9 @@ Calculated with Trip Cost Calculator, made by @popkrull`
 							onClick={() => {
 								navigator.clipboard.writeText(getClipboardText())
 									.then(() => {
-										setShareButtonOptions({ text: 'Copied!', color: '#18ad3b' })
+										setShareButtonOptions({ text: locale.Copied, color: '#18ad3b' })
 										setTimeout(() => {
-											setShareButtonOptions({ text: 'Copy to clipboard', color: '#1d5c2c' })
+											setShareButtonOptions({ text: locale.CopyToClipboard, color: '#1d5c2c' })
 										}, 2000)
 									})
 									.catch(err => {

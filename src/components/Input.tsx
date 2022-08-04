@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLangContext } from '../contexts/LanguageContext';
 
 import '../styles/Input.css';
 
@@ -25,6 +26,8 @@ function getLabelClassName(state: string): string {
 
 export default function Input({ value, onChange, label, rightLabel }: InputProps): JSX.Element {
 
+	const text: any = useLangContext()
+
 	const [state, setState] = useState('blur');
 
 	const onFocus = () => setState('focus')
@@ -48,7 +51,7 @@ export default function Input({ value, onChange, label, rightLabel }: InputProps
 				<label className={getLabelClassName(state)}>{rightLabel}</label>
 			</div>
 			<input type="text" value={value} onChange={onChange} onFocus={onFocus} onBlur={onBlur} />
-			<p className='err nomargin'> {!isValid() ? 'Must be a number' : ''}</p>
+			<p className='err nomargin'> {!isValid() ? text.MustBeNumber : ''}</p>
 		</div>
 	);
 }

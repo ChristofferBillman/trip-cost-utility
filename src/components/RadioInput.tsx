@@ -1,3 +1,6 @@
+import { useLangContext } from "../contexts/LanguageContext";
+
+
 interface RadioInputProps {
 	options: string[];
 	selectedOption: string;
@@ -6,11 +9,13 @@ interface RadioInputProps {
 
 export default function RadioInput({ options, selectedOption, setOption }: RadioInputProps): JSX.Element {
 
+	const content: any = useLangContext()
+
 	return (
 		<div className='radio-input-container'>
 			{options.length === 0 ?
 				(
-					<label style={{ color: '#ffa724' }}>Cannot pick fuel type for this mode of transport.</label>
+					<label style={{ color: '#ffa724' }}>{content.CannotPickFuelType}</label>
 				) : (
 					options.map((option: string) => {
 						return (
