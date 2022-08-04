@@ -47,6 +47,13 @@ label {
 	user-select: none;
 }
 
+a {
+	font-family: 'Inter', sans-serif;
+	font-weight: 700;
+	font-size: 1rem;
+	color: var(--primary);
+}
+
 .App {
 	display: flex;
 	flex-direction: column;
@@ -58,6 +65,8 @@ label {
 	display: flex;
 	flex-direction: column;
 	max-width: 600px;
+	position: relative;
+	min-height: 100vh;
 }
 
 .margin-container {
@@ -81,6 +90,11 @@ label {
 	cursor: not-allowed;
 }
 
+.selected {
+	color: var(--primary);
+	transition-duration: 200ms;
+}
+
 .nomargin {
 	margin: 0;
 }
@@ -90,6 +104,15 @@ label {
 	flex-direction: row;
 	justify-content: space-between;
 	align-items: center;
+}
+
+.footer-container {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	position: absolute;
+	bottom: 2rem;
 }
 
 button {

@@ -33,11 +33,6 @@ input[type="radio"] {
 	cursor: pointer;
 }
 
-.selected {
-	color: var(--primary);
-	transition-duration: 200ms;
-}
-
 .label-blurred {
 	top: 1rem;
 	z-index: -1;
