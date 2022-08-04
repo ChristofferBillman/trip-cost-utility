@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Language, useLangContext } from '../contexts/LanguageContext';
+import { Language, useLanguageContext } from '../contexts/LanguageContext';
 
 import '../styles/Input.css';
 
@@ -26,7 +26,7 @@ function getLabelClassName(state: string): string {
 
 export default function Input({ value, onChange, label, rightLabel }: InputProps): JSX.Element {
 
-	const locale: Language = useLangContext()
+	const locale: Language = useLanguageContext()
 
 	const [state, setState] = useState('blur');
 	const [err, setErr] = useState('');

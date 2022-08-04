@@ -7,12 +7,13 @@ import Input from './components/Input';
 import RadioInput from './components/RadioInput';
 import Button from './components/Button';
 import VSpace from './components/VSpace';
-import { useLangContext, Language } from './contexts/LanguageContext';
+import Footer from './components/Footer';
+import { useLanguageContext, Language } from './contexts/LanguageContext';
 
 export default function App(): JSX.Element {
 
 
-	const locale: Language = useLangContext();
+	const locale: Language = useLanguageContext();
 
 	const [distance, setDistance] = useState('');
 	const [fuelConsumtpion, setFuelConsumption] = useState('');
@@ -179,6 +180,8 @@ export default function App(): JSX.Element {
 					</>
 				}
 			</div>
+
+			<Footer />
 		</div >
 	);
 }

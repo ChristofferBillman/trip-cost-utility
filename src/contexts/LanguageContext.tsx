@@ -35,7 +35,7 @@ export type Language = {
 
 const LangContext = createContext({} as Language);
 
-export const useLangContext = () => {
+export const useLanguageContext = () => {
 	const context = useContext(LangContext);
 
 	if (context === undefined) {

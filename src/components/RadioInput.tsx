@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { useLangContext } from '../contexts/LanguageContext';
+import { useLanguageContext } from '../contexts/LanguageContext';
 
 import '../styles/Input.css';
 
@@ -13,7 +13,7 @@ interface RadioInputProps {
 
 export default function RadioInput({ options, selectedOption, setOption, disabledOptions }: RadioInputProps): JSX.Element {
 
-	const locale = useLangContext();
+	const locale = useLanguageContext();
 	const [isValid, setIsValid] = useState(true);
 
 	useEffect(() => {
