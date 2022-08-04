@@ -71,6 +71,10 @@ label {
 	color: var(--red);
 }
 
+.warn {
+	color: '#ffa724'
+}
+
 .nomargin {
 	margin: 0;
 }

@@ -15,7 +15,7 @@ export default function RadioInput({ options, selectedOption, setOption }: Radio
 		<div className='radio-input-container'>
 			{options.length === 0 ?
 				(
-					<label style={{ color: '#ffa724' }}>{content.CannotPickFuelType}</label>
+					<label className='warn'>{content.CannotPickFuelType}</label>
 				) : (
 					options.map((option: string) => {
 						return (
