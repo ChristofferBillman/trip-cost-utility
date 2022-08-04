@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 
 import { useLangContext } from '../contexts/LanguageContext';
 
+import '../styles/Input.css';
+
 interface RadioInputProps {
 	options: string[];
 	selectedOption: string;
@@ -12,15 +14,15 @@ interface RadioInputProps {
 export default function RadioInput({ options, selectedOption, setOption, disabledOptions }: RadioInputProps): JSX.Element {
 
 	const locale = useLangContext();
-	const [warning, setWarning] = useState('');
+	const [isValid, setIsValid] = useState(true);
 
 	useEffect(() => {
 
 	}, [selectedOption]);
 
 	return (
-		<>
-			<div className='radio-input-container'>
+		<div className='radio-input-container'>
+			<div className='row'>
 				{options.map((option: string) => {
 					if (disabledOptions && disabledOptions.includes(option)) {
 						return (
@@ -28,10 +30,10 @@ export default function RadioInput({ options, selectedOption, setOption, disable
 								className='disabled'
 								key={option}
 								onClick={() => {
-									setWarning(locale.isDisabled)
+									setIsValid(false)
 									setTimeout(() => {
-										setWarning('')
-									}, 1000);
+										setIsValid(true)
+									}, 2000);
 								}}
 							>
 								{option}
@@ -50,14 +52,14 @@ export default function RadioInput({ options, selectedOption, setOption, disable
 									value={option}
 									checked={selectedOption === option}
 									onChange={() => setOption(option)}
-									onClick={() => setWarning('')}
+									onClick={() => setIsValid(true)}
 								/>
 								{option}
 							</label>)
 					}
 				})}
+				<p className={`message warn nomargin ${isValid ? 'hide' : 'show'}`}>{locale.isDisabled}</p>
 			</div >
-			<p className='warn nomargin'>{warning}</p>
-		</>
+		</div>
 	);
 }
