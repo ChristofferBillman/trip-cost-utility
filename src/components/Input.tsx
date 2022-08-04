@@ -34,7 +34,7 @@ export default function Input({ value, onChange, label, rightLabel }: InputProps
 	useEffect(() => {
 		if (Number.isNaN(Number(value))) setErr(locale.MustBeNumber);
 		else if (Number(value) < 0) setErr(locale.MustBePositive);
-	}, [value])
+	}, [value, locale]);
 
 	const onFocus = () => setState('focus')
 	const onBlur = () => {
