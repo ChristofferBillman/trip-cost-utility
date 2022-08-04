@@ -26,7 +26,7 @@ function getLabelClassName(state: string): string {
 
 export default function Input({ value, onChange, label, rightLabel }: InputProps): JSX.Element {
 
-	const text: any = useLangContext()
+	const locale: any = useLangContext()
 
 	const [state, setState] = useState('blur');
 
@@ -51,7 +51,7 @@ export default function Input({ value, onChange, label, rightLabel }: InputProps
 				<label className={getLabelClassName(state)}>{rightLabel}</label>
 			</div>
 			<input type="text" value={value} onChange={onChange} onFocus={onFocus} onBlur={onBlur} />
-			<p className='err nomargin'> {!isValid() ? text.MustBeNumber : ''}</p>
+			<p className={`message err nomargin ' + ${isValid() ? 'hide' : 'show'}`}> {locale.MustBeNumber}</p>
 		</div>
 	);
 }
