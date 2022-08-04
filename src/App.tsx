@@ -157,26 +157,25 @@ export default function App(): JSX.Element {
 													setResult('');
 												}}
 												color='#FF2424'
-											/>*/}
-
-							<Button
-								text={shareButtonOptions.text}
-								onClick={() => {
-									navigator.clipboard.writeText(getClipboardText())
-										.then(() => {
-											setShareButtonOptions({ text: locale.Copied, color: '#18ad3b' })
-											setTimeout(() => {
-												setShareButtonOptions({ text: locale.CopyToClipboard, color: '#1d5c2c' })
-											}, 2000)
-										})
-										.catch(err => {
-											console.log('Something went wrong', err);
-										})
-								}}
-								color={shareButtonOptions.color}
-							/>
-
+										/>*/}
 						</div>
+
+						<Button
+							text={shareButtonOptions.text}
+							onClick={() => {
+								navigator.clipboard.writeText(getClipboardText())
+									.then(() => {
+										setShareButtonOptions({ text: locale.Copied, color: '#18ad3b' })
+										setTimeout(() => {
+											setShareButtonOptions({ text: locale.CopyToClipboard, color: '#1d5c2c' })
+										}, 2000)
+									})
+									.catch(err => {
+										console.log('Something went wrong', err);
+									})
+							}}
+							color={shareButtonOptions.color}
+						/>
 					</>
 				}
 			</div>
