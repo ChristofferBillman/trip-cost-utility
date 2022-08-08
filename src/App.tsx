@@ -172,6 +172,13 @@ export default function App(): JSX.Element {
 						<Button
 							text={shareButtonOptions.text}
 							onClick={() => {
+								if(navigator.clipboard === undefined) {
+									setShareButtonOptions({ text: locale.CopyClipboardFailed, color: '#FF2424' })
+									setTimeout(() => {
+										setShareButtonOptions({ text: locale.CopyToClipboard, color: '#1d5c2c' })
+									}, 2000)
+									return
+								}
 								navigator.clipboard.writeText(getClipboardText())
 									.then(() => {
 										setShareButtonOptions({ text: locale.Copied, color: '#18ad3b' })
@@ -180,10 +187,7 @@ export default function App(): JSX.Element {
 										}, 2000)
 									})
 									.catch(err => {
-										setShareButtonOptions({ text: locale.CopyClipboardFailed, color: '#FF2424' })
-										setTimeout(() => {
-											setShareButtonOptions({ text: locale.CopyToClipboard, color: '#1d5c2c' })
-										}, 2000)
+										console.error(err)
 									})
 							}}
 							color={shareButtonOptions.color}
