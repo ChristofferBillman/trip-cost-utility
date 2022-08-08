@@ -172,7 +172,10 @@ export default function App(): JSX.Element {
 										}, 2000)
 									})
 									.catch(err => {
-										console.log('Something went wrong', err);
+										setShareButtonOptions({ text: locale.CopyClipboardFailed, color: '#FF2424' })
+										setTimeout(() => {
+											setShareButtonOptions({ text: locale.CopyToClipboard, color: '#1d5c2c' })
+										}, 2000)
 									})
 							}}
 							color={shareButtonOptions.color}

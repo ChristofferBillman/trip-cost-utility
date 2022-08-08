@@ -28,6 +28,7 @@ export type Language = {
 	MustBeNumber: string;
 	MustBePositive: string;
 	NotYetImplemented: string;
+	CopyClipboardFailed: string;
 	isDisabled: string;
 	getClipboardText: (distance: string, fuelConsumption: string, fuelCost: string,
 		currency: string, result: string, numOfPeople: string) => string;
@@ -89,6 +90,7 @@ const translations: Language[] = [
 		MustBeNumber: 'Must be a number',
 		MustBePositive: 'Must be positive',
 		NotYetImplemented: 'is currently unsupported',
+		CopyClipboardFailed: 'Failed. Try again over HTTPS.',
 		isDisabled: 'Is currrently disabled. Please try another mode of transport.',
 		getClipboardText: (distance: string, fuelConsumption: string, fuelCost: string,
 			currency: string, result: string, numOfPeople: string) => {
@@ -132,6 +134,7 @@ const translations: Language[] = [
 		MustBeNumber: 'Måste vara ett nummer',
 		MustBePositive: 'Måste vara positivt',
 		NotYetImplemented: 'stöds ej ännu',
+		CopyClipboardFailed: 'Ett fel inträffade. Försök igen över HTTPS.',
 		isDisabled: 'Stöds ej ännu. Välj ett annat transportsätt.',
 		getClipboardText: (distance: string, fuelConsumption: string, fuelCost: string,
 			currency: string, result: string, numOfPeople: string) => {
