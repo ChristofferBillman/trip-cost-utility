@@ -12,7 +12,6 @@ import { useLanguageContext, Language } from './contexts/LanguageContext';
 
 export default function App(): JSX.Element {
 
-
 	const locale: Language = useLanguageContext();
 
 	const [distance, setDistance] = useState('');
@@ -44,8 +43,17 @@ export default function App(): JSX.Element {
 	}, [distance, fuelConsumtpion, fuelCost, modeOfTransport, numOfPeople])
 
 	// when result (i.e when calculate is pressed) changes, scroll to the bottom of the page.
+
+	const [firstRender, setFirstRender] = useState(true)
 	useEffect(() => {
-		window.scrollTo(0, 4000)
+		if(firstRender) {
+			setFirstRender(false)
+			return
+		}
+		window.scrollTo({
+			top: 4000,
+			behavior: 'smooth'
+		  })
 	}, [result])
 
 	const getClipboardText = () => {
