@@ -12,7 +12,6 @@ import { useLanguageContext, Language } from './contexts/LanguageContext';
 
 export default function App(): JSX.Element {
 
-
 	const locale: Language = useLanguageContext();
 
 	const [distance, setDistance] = useState('');
@@ -44,8 +43,17 @@ export default function App(): JSX.Element {
 	}, [distance, fuelConsumtpion, fuelCost, modeOfTransport, numOfPeople])
 
 	// when result (i.e when calculate is pressed) changes, scroll to the bottom of the page.
+
+	const [firstRender, setFirstRender] = useState(true)
 	useEffect(() => {
-		window.scrollTo(0, 4000)
+		if (firstRender) {
+			setFirstRender(false)
+			return
+		}
+		window.scrollTo({
+			top: 4000,
+			behavior: 'smooth'
+		})
 	}, [result])
 
 	const getClipboardText = () => {
@@ -164,6 +172,13 @@ export default function App(): JSX.Element {
 							<Button
 								text={shareButtonOptions.text}
 								onClick={() => {
+									if (navigator.clipboard === undefined) {
+										setShareButtonOptions({ text: locale.CopyClipboardFailed, color: '#FF2424' })
+										setTimeout(() => {
+											setShareButtonOptions({ text: locale.CopyToClipboard, color: '#1d5c2c' })
+										}, 2000)
+										return
+									}
 									navigator.clipboard.writeText(getClipboardText())
 										.then(() => {
 											setShareButtonOptions({ text: locale.Copied, color: '#18ad3b' })
@@ -172,16 +187,15 @@ export default function App(): JSX.Element {
 											}, 2000)
 										})
 										.catch(err => {
-											console.log('Something went wrong', err);
+											console.error(err)
 										})
 								}}
 								color={shareButtonOptions.color}
 							/>
 						</>
 					}
+					<Footer />
 				</div>
-				<Footer />
-			</div>
-		</div >
-	);
+			</div >
+			);
 }

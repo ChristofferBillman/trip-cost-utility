@@ -113,7 +113,7 @@ a {
 	justify-content: space-between;
 	align-items: center;
 	position: relative;
-	padding: 2rem 0 2rem 0;
+	padding: 3rem 0 3rem 0;
 }
 
 button {
@@ -136,4 +136,11 @@ button:focus {
 	outline-style: solid;
 	outline-color: var(--primary);
 	transition-duration: 200ms;
+}
+
+@media (max-width: 600px) {
+	.footer-container {
+		flex-direction: column;
+		align-items: flex-start;
+	}
 }
