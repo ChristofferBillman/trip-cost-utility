@@ -7,11 +7,12 @@ import '../styles/Input.css';
 interface RadioInputProps {
 	options: string[];
 	selectedOption: string;
-	setOption: (option: string) => void;
+	setOption: (e: React.ChangeEvent<HTMLInputElement>) => void;
 	disabledOptions?: string[];
+	name: string;
 }
 
-export default function RadioInput({ options, selectedOption, setOption, disabledOptions }: RadioInputProps): JSX.Element {
+export default function RadioInput({ options, selectedOption, setOption, disabledOptions, name }: RadioInputProps): JSX.Element {
 
 	const locale = useLanguageContext();
 	const [isValid, setIsValid] = useState(true);
@@ -48,10 +49,10 @@ export default function RadioInput({ options, selectedOption, setOption, disable
 							>
 								<input
 									type='radio'
-									name='modeOfTransport'
+									name={name}
 									value={option}
 									checked={selectedOption === option}
-									onChange={() => setOption(option)}
+									onChange={setOption}
 									onClick={() => setIsValid(true)}
 								/>
 								{option}

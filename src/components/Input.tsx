@@ -8,6 +8,7 @@ interface InputProps {
 	onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 	label: string;
 	rightLabel?: string;
+	name: string;
 }
 
 function getLabelClassName(state: string): string {
@@ -24,7 +25,7 @@ function getLabelClassName(state: string): string {
 	}
 }
 
-export default function Input({ value, onChange, label, rightLabel }: InputProps): JSX.Element {
+export default function Input({ value, onChange, label, rightLabel, name }: InputProps): JSX.Element {
 
 	const locale: Language = useLanguageContext()
 
@@ -57,7 +58,7 @@ export default function Input({ value, onChange, label, rightLabel }: InputProps
 				<label className={getLabelClassName(state)}>{label}</label>
 				<label className={getLabelClassName(state)}>{rightLabel}</label>
 			</div>
-			<input type="text" value={value} onChange={onChange} onFocus={onFocus} onBlur={onBlur} />
+			<input type="text" value={value} onChange={onChange} onFocus={onFocus} onBlur={onBlur} name={name} />
 			<p className={`message err nomargin ' + ${isValid() ? 'hide' : 'show'}`}> {err}</p>
 		</div>
 	);

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useReducer } from 'react';
 
 import './styles/App.css';
 import './styles/Input.css';
@@ -9,41 +9,26 @@ import Button from './components/Button';
 import VSpace from './components/VSpace';
 import Footer from './components/Footer';
 import { useLanguageContext, Language } from './contexts/LanguageContext';
+import { FormReducer, FormActionTypes as FormActions, DEFAULT_FORM_STATE } from './reducers/FormReducer';
 
 export default function App(): JSX.Element {
 
 	const locale: Language = useLanguageContext();
 
-	const [distance, setDistance] = useState('');
-	const [fuelConsumtpion, setFuelConsumption] = useState('');
-	const [fuel, setFuel] = useState(locale.Fuels[0]);
-	const [fuelCost, setFuelCost] = useState('');
-	const [modeOfTransport, setModeOfTransport] = useState(locale.ModesOfTransport[0]);
-
-	const [numOfPeople, setNumOfPeople] = useState('');
+	const [form, dispatch] = useReducer(
+		FormReducer,
+		{
+			...DEFAULT_FORM_STATE,
+			modeOfTransport: locale.ModesOfTransport[0]
+		});
 
 	const [currency] = useState(locale.Currency);
 	const [result, setResult] = useState('');
-	const [isValidForm, setIsValidForm] = useState(false);
 
 	const [shareButtonOptions, setShareButtonOptions] = useState({ text: locale.CopyToClipboard, color: '#1d5c2c' });
 	const [calculateButtonText, setCalculateButtonText] = useState(locale.Calculate);
 
-	const isValid = (value: string) => {
-		if (value === '') return false
-		return !Number.isNaN(Number(value)) && Number(value) > 0;
-	}
-
-	// check form validity AFTER values have been updated, thus using useEffect
-	useEffect(() => {
-		const formIsValid = () => {
-			return isValid(distance) && isValid(fuelConsumtpion) && isValid(fuelCost) && isValid(numOfPeople);
-		}
-		setIsValidForm(formIsValid());
-	}, [distance, fuelConsumtpion, fuelCost, modeOfTransport, numOfPeople])
-
 	// when result (i.e when calculate is pressed) changes, scroll to the bottom of the page.
-
 	const [firstRender, setFirstRender] = useState(true)
 	useEffect(() => {
 		if (firstRender) {
@@ -54,12 +39,24 @@ export default function App(): JSX.Element {
 			top: 4000,
 			behavior: 'smooth'
 		})
-	}, [result])
+	}, [result, firstRender]);
 
 	const getClipboardText = () => {
-		return locale.getClipboardText(distance, fuelConsumtpion, fuelCost, currency, result, numOfPeople);
+		return locale.getClipboardText(form.distance, form.fuelConsumption, form.fuelCost, currency, result, form.numOfPeople);
 	}
 
+	const onFieldChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const { name, value } = e.target;
+		dispatch(
+			{
+				type: FormActions.SET_FORM_FIELD,
+				payload:
+				{
+					value: value,
+					field: name
+				}
+			})
+	}
 
 	return (
 		<div className="App">
@@ -74,58 +71,64 @@ export default function App(): JSX.Element {
 
 						<Input
 							label={locale.Distance}
+							name='distance'
 							rightLabel='(km)'
-							value={distance}
-							onChange={(event: any) => setDistance(event.target.value)}
+							value={form.distance}
+							onChange={onFieldChange}
 						/>
 
 						<VSpace />
 
 						<RadioInput
 							options={locale.ModesOfTransport}
+							name='modeOfTransport'
 							disabledOptions={[locale.ModesOfTransport[1], locale.ModesOfTransport[2], locale.ModesOfTransport[3]]}
-							selectedOption={modeOfTransport}
-							setOption={setModeOfTransport}
+							selectedOption={form.modeOfTransport}
+							setOption={onFieldChange}
 						/>
 
 						<VSpace />
 
 						<RadioInput
-							options={locale.Fuels[modeOfTransport]}
-							selectedOption={fuel}
-							setOption={setFuel}
+							options={locale.Fuels[form.modeOfTransport]}
+							name='fuelType'
+							selectedOption={form.fuelType}
+							setOption={onFieldChange}
 						/>
 
 						<VSpace />
 
 						<Input
-							label={fuel === locale.Fuels[modeOfTransport][2] ? locale.ElectricityConsumption : locale.FuelConsumption}
-							rightLabel={fuel === locale.Fuels[modeOfTransport][2] ? '(kWh/10km)' : '(L/10km)'}
-							value={fuelConsumtpion}
-							onChange={(event: any) => setFuelConsumption(event.target.value)}
+							label={form.fuelType === locale.Fuels[form.modeOfTransport][2] ? locale.ElectricityConsumption : locale.FuelConsumption}
+							name='fuelConsumption'
+							rightLabel={form.fuelType === locale.Fuels[form.modeOfTransport][2] ? '(kWh/10km)' : '(L/10km)'}
+							value={form.fuelConsumption}
+							onChange={onFieldChange}
 						/>
 
 						<VSpace />
 
 						<Input
-							label={fuel === locale.Fuels[modeOfTransport][2] ? locale.ElectricityCost : locale.FuelCost}
-							rightLabel={fuel === locale.Fuels[modeOfTransport[2]] ? '(' + currency + '/kWh)' : '(' + currency + '/L)'}
-							value={fuelCost}
-							onChange={(event: any) => setFuelCost(event.target.value)}
+							label={form.fuelType === locale.Fuels[form.modeOfTransport][2] ? locale.ElectricityCost : locale.FuelCost}
+							name='fuelCost'
+							rightLabel={form.fuelType === locale.Fuels[form.modeOfTransport[2]] ? '(' + currency + '/kWh)' : '(' + currency + '/L)'}
+							value={form.fuelCost}
+							onChange={onFieldChange}
 						/>
 
 						<VSpace />
 
 						<Input
 							label={locale.NumOfPeople}
-							value={String(numOfPeople)}
-							onChange={(event: any) => setNumOfPeople(event.target.value)}
+							name='numOfPeople'
+							value={String(form.numOfPeople)}
+							onChange={onFieldChange}
 						/>
 					</div>
 					<Button
 						text={calculateButtonText}
 						onClick={() => {
-							if (!isValidForm) {
+							if (!form.isValid) {
 								setCalculateButtonText(locale.FillAllFields)
 								setTimeout(() => {
 									setCalculateButtonText(locale.Calculate)
@@ -133,10 +136,10 @@ export default function App(): JSX.Element {
 								setResult('')
 								return
 							}
-							const cost = parseFloat(distance) / 10 * parseFloat(fuelConsumtpion) * parseFloat(fuelCost)
+							const cost = parseFloat(form.distance) / 10 * parseFloat(form.fuelConsumption) * parseFloat(form.fuelCost)
 							setResult(Math.round(cost).toString())
 						}}
-						color={isValidForm ? '#8424FF' : '#909090'}
+						color={form.isValid ? '#8424FF' : '#909090'}
 					/>
 
 					{result === '' ? '' :
@@ -146,12 +149,12 @@ export default function App(): JSX.Element {
 
 								{/* If number of people is more than 1 */}
 								<h2 className='black'>
-									{Number(numOfPeople) !== 1 ? Number(result) / Number(numOfPeople) + ' ' + currency + locale.CostPerPerson : ''}
+									{Number(form.numOfPeople) !== 1 ? Number(result) / Number(form.numOfPeople) + ' ' + currency + locale.CostPerPerson : ''}
 								</h2>
 
 								{/* If number of people is only 1 */}
 								<h2>
-									{Number(numOfPeople) === 1 ? 'Traveling ' + distance + ' km by ' + modeOfTransport + ' using ' + fuel : ''}
+									{Number(form.numOfPeople) === 1 ? 'Traveling ' + form.distance + ' km by ' + form.modeOfTransport + ' using ' + form.fuelType : ''}
 								</h2>
 
 								{/*<Button
